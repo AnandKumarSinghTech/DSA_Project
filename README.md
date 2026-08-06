@@ -4,7 +4,7 @@ An interactive full-stack web application featuring four classic games: **Sudoku
 
 ## 🌟 Architecture & Tech Stack
 
-- **Frontend**: React (Next.js 16 App Router) with Tailwind CSS, Lucide Icons, Canvas Confetti, and synthesized Web Audio API sound effects.
+- **Frontend**: React with Tailwind CSS, Lucide Icons, Canvas Confetti, and synthesized Web Audio API sound effects.
 - **Backend & DSA Bridge**: 
   - **Node.js (Express & Next.js API Routes)** executing compiled C++ binaries via `child_process.execFile`.
   - **C++ Core Algorithms**:
