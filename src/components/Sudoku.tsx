@@ -30,9 +30,32 @@ export default function Sudoku({ onBack }: SudokuProps) {
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
   const [showAlgoInfo, setShowAlgoInfo] = useState<boolean>(false);
 
+  const shufflePuzzle = (flatStr: string) => {
+    let g = [];
+    for (let i = 0; i < 9; i++) {
+      g.push(flatStr.slice(i * 9, i * 9 + 9).split("").map(Number));
+    }
+    const swapRows = (r1: number, r2: number) => { const t = g[r1]; g[r1] = g[r2]; g[r2] = t; };
+    const swapCols = (c1: number, c2: number) => { for (let r = 0; r < 9; r++) { const t = g[r][c1]; g[r][c1] = g[r][c2]; g[r][c2] = t; } };
+    const rand = () => Math.random() > 0.5;
+    for (let b = 0; b < 3; b++) {
+      if (rand()) swapRows(b * 3, b * 3 + 1);
+      if (rand()) swapRows(b * 3 + 1, b * 3 + 2);
+      if (rand()) swapRows(b * 3, b * 3 + 2);
+    }
+    for (let b = 0; b < 3; b++) {
+      if (rand()) swapCols(b * 3, b * 3 + 1);
+      if (rand()) swapCols(b * 3 + 1, b * 3 + 2);
+      if (rand()) swapCols(b * 3, b * 3 + 2);
+    }
+    return g.flat().join("");
+  };
+
   // Load starter puzzle
-  const loadPuzzle = (diff: "easy" | "medium" | "hard") => {
-    const puzzleStr = PRESET_PUZZLES[diff];
+  const loadPuzzle = (diff: "easy" | "medium" | "hard", generateNew: boolean = false) => {
+    const baseStr = PRESET_PUZZLES[diff];
+    const puzzleStr = generateNew ? shufflePuzzle(baseStr) : (initialGrid.length ? initialGrid.flat().join("") : shufflePuzzle(baseStr));
+    
     const initG: number[][] = Array(9).fill(0).map(() => Array(9).fill(0));
     const currG: number[][] = Array(9).fill(0).map(() => Array(9).fill(0));
 
@@ -53,8 +76,19 @@ export default function Sudoku({ onBack }: SudokuProps) {
     setIsTimerRunning(false);
   };
 
+  const restartCurrent = () => {
+    setGrid(initialGrid.map(row => [...row]));
+    setSelectedCell([0, 0]);
+    setConflicts([]);
+    setStatusMsg("Grid reset to start.");
+    setStatusType("info");
+    setAiHint("");
+    setTimer(0);
+    setIsTimerRunning(false);
+  };
+
   useEffect(() => {
-    loadPuzzle(difficulty);
+    loadPuzzle(difficulty, true);
   }, [difficulty]);
 
   useEffect(() => {
@@ -396,14 +430,24 @@ export default function Sudoku({ onBack }: SudokuProps) {
           </div>
         </div>
 
-        <div>
-          <label className="text-xs font-medium text-slate-400 block mb-1">Quick Action</label>
-          <button
-            onClick={() => loadPuzzle(difficulty)}
-            className="w-full flex items-center justify-center gap-1 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-lg border border-slate-700 text-slate-300"
-          >
-            <RotateCcw className="w-3.5 h-3.5" /> Reset Grid
-          </button>
+        <div className="flex flex-col gap-1">
+          <label className="text-xs font-medium text-slate-400 block">Actions</label>
+          <div className="flex gap-1 h-full">
+            <button
+              onClick={() => loadPuzzle(difficulty, true)}
+              title="Generate a new puzzle of the same difficulty"
+              className="flex-1 flex flex-col items-center justify-center py-1 bg-cyan-900/60 hover:bg-cyan-700 text-xs font-bold rounded-lg border border-cyan-700 text-cyan-100 transition"
+            >
+              <RefreshCw className="w-3.5 h-3.5 mb-0.5" /> New
+            </button>
+            <button
+              onClick={restartCurrent}
+              title="Reset the current puzzle to start"
+              className="flex-1 flex flex-col items-center justify-center py-1 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-lg border border-slate-700 text-slate-300 transition"
+            >
+              <RotateCcw className="w-3.5 h-3.5 mb-0.5" /> Reset
+            </button>
+          </div>
         </div>
       </div>
 
