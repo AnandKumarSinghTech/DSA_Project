@@ -8,7 +8,7 @@ const extension = process.platform === "win32" ? ".exe" : "";
 
 mkdirSync(outputDirectory, { recursive: true });
 
-for (const name of ["nqueens", "sudoku", "hanoi", "tictactoe"]) {
+for (const name of ["nqueens", "sudoku", "hanoi"]) {
   const result = spawnSync("g++", ["-O3", join(root, "cpp", `${name}.cpp`), "-o", join(outputDirectory, `${name}${extension}`)], {
     stdio: "inherit",
   });

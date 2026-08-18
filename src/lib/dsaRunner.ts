@@ -14,7 +14,7 @@ export function ensureCppBinaries(): void {
       fs.mkdirSync(binDir, { recursive: true });
     }
 
-    const binaries = ["nqueens", "sudoku", "hanoi", "tictactoe"];
+    const binaries = ["nqueens", "sudoku", "hanoi"];
     for (const bin of binaries) {
       const binPath = path.join(binDir, executableName(bin));
       const cppPath = path.join(cppDir, `${bin}.cpp`);

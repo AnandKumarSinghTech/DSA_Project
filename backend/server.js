@@ -78,24 +78,6 @@ app.post(['/api/solve-hanoi', '/api/dsa/hanoi'], (req, res) => {
   });
 });
 
-// Route for TicTacToe C++ execution
-app.post(['/api/solve-tictactoe', '/api/dsa/tictactoe'], (req, res) => {
-  const { size = 3, player = 'O', boardStr = '_________', mode = 'move' } = req.body;
-  const binary = executable('tictactoe');
-
-  if (!fs.existsSync(binary)) {
-    return res.status(500).json({ error: 'C++ tictactoe binary not compiled.' });
-  }
-
-  execFile(binary, [String(size), player, boardStr, mode], (error, stdout, stderr) => {
-    if (error) return res.status(500).json({ error: stderr || error.message });
-    try {
-      res.json(JSON.parse(stdout.trim()));
-    } catch (e) {
-      res.json({ output: stdout.trim() });
-    }
-  });
-});
 
 // Route for Gemini AI Hint
 app.post('/api/hint', async (req, res) => {

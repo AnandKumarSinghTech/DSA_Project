@@ -4,11 +4,10 @@ import { useState } from "react";
 import NQueens from "./NQueens";
 import Sudoku from "./Sudoku";
 import TowerOfHanoi from "./TowerOfHanoi";
-import TicTacToe from "./TicTacToe";
 import { sound } from "@/lib/sound";
 import { Cpu, ArrowRight, ShieldCheck, Zap, BookOpen } from "lucide-react";
 
-type GameType = "dashboard" | "nqueens" | "sudoku" | "hanoi" | "tictactoe";
+type GameType = "dashboard" | "nqueens" | "sudoku" | "hanoi";
 
 export default function Dashboard() {
   const [activeGame, setActiveGame] = useState<GameType>("dashboard");
@@ -51,17 +50,6 @@ export default function Dashboard() {
       color: "from-emerald-500/20 to-teal-500/20 border-emerald-500/40 hover:border-emerald-400",
       accent: "text-emerald-400",
       badge: "Recursion",
-    },
-    {
-      id: "tictactoe" as const,
-      title: "Tic-Tac-Toe Minimax AI",
-      emoji: "❌⭕",
-      tagline: "Alpha-Beta Pruning Game Theory",
-      complexity: "Alpha-Beta Pruning Bounds",
-      description: "Play against an unbeatable C++ Minimax AI on 3x3, 4x4, or 5x5 grids. Test tactical block & fork strategies.",
-      color: "from-indigo-500/20 to-purple-500/20 border-indigo-500/40 hover:border-indigo-400",
-      accent: "text-indigo-400",
-      badge: "Minimax Tree",
     },
   ];
 
@@ -141,7 +129,7 @@ export default function Dashboard() {
                 <h3 className="text-xl md:text-2xl font-black text-white tracking-tight flex items-center gap-2">
                   <BookOpen className="w-6 h-6 text-cyan-400" /> Choose a Puzzle Game
                 </h3>
-                <span className="text-xs font-semibold text-slate-400">4 Core Algorithms Featured</span>
+                <span className="text-xs font-semibold text-slate-400">3 Core Algorithms Featured</span>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -191,8 +179,6 @@ export default function Dashboard() {
           <Sudoku onBack={() => selectGame("dashboard")} />
         ) : activeGame === "hanoi" ? (
           <TowerOfHanoi onBack={() => selectGame("dashboard")} />
-        ) : activeGame === "tictactoe" ? (
-          <TicTacToe onBack={() => selectGame("dashboard")} />
         ) : null}
       </main>
 
